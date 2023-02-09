@@ -1,0 +1,43 @@
+{
+  "port": 8081,
+
+  "tlsPort": 0,
+
+  "nsPort": 8088,
+
+  "buildConcurrency": 0,
+
+  "workDir": "~/.esmd",
+
+  "cache": "memory:default",
+
+  "database": "bolt:~/.esmd/esm.db",
+
+  "storage": "local:~/.esmd/storage",
+
+  "logLevel": "info",
+
+  "logDir": "~/.esmd/log",
+
+  "origin": "",
+
+  "basePath": "/",
+
+  "npmRegistry": "https://registry.npmjs.org",
+
+  "npmToken": "",
+
+  "unpkgOrigin": "https://unpkg.com",
+
+  "noCompress": false,
+
+  "banList": {
+    "packages": ["@some_scope/package_name"],
+    "scopes": [{
+      "name": "@your_scope",
+      "excludes": [
+        "package_name"
+      ]
+    }]
+  }
+}
