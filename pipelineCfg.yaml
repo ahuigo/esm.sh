@@ -1,0 +1,7 @@
+type: golangSingleModule
+deploy:
+  target: kubernetes
+  sourceSubPath:
+    - "/"
+  currentDeployStrategy:
+    type: rollingUpdate
