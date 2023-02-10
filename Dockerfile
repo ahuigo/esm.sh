@@ -1,13 +1,32 @@
-FROM golang:1.18 AS build
+# syntax = docker/dockerfile:experimental
+FROM hdmap-artifactory-registry-vpc.cn-beijing.cr.aliyuncs.com/hdmap-go-base/golang:1.19.0-alpine AS build-env
 
-RUN apt-get update -y && apt-get install -y xz-utils
-RUN useradd -u 1000 -m esm
-RUN mkdir /esm && chown esm:esm /esm
-RUN git clone https://github.com/ije/esm.sh /esm/esm.sh
-RUN echo "{\"port\":80,\"workDir\":\"/esm\"}" >> /esm/config.json
+ENV GOSUMDB=off \
+    GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64 \
+    GOPROXY="https://artifactory.momenta.works/artifactory/api/go/go"
 
-USER esm
-WORKDIR /esm
-RUN go build -o bin/esmd esm.sh/main.go
+WORKDIR /workspace
+COPY go.mod go.sum ./
 
-ENTRYPOINT ["/esm/bin/esmd", "--config", "config.json"]
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download
+
+COPY . .
+
+RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
+    go build -ldflags="-s -w" -o /bin/esmd ./main.go
+
+FROM hdmap-artifactory-registry-vpc.cn-beijing.cr.aliyuncs.com/docker-hdmap-sre/alpine:3.14.0
+RUN ln -s /var/cache/apk /etc/apk/cache
+RUN --mount=type=cache,target=/var/cache/apk --mount=type=cache,target=/etc/apk/cache \
+    sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
+    && apk update --no-cache \
+    && apk add --no-cache ca-certificates tzdata bash curl xz
+
+COPY --from=build-env /bin/esmd /esmd
+
+EXPOSE 8080
+ENTRYPOINT [ "/esmd", "--config", "/config/config.json"]
