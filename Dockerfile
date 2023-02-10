@@ -6,7 +6,7 @@ ENV GOSUMDB=off \
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
-    GOPROXY="https://artifactory.momenta.works/artifactory/api/go/go"
+    GOPROXY="https://artifactory.momenta.works/artifactory/go"
 
 WORKDIR /workspace
 COPY go.mod go.sum ./
@@ -27,6 +27,7 @@ RUN --mount=type=cache,target=/var/cache/apk --mount=type=cache,target=/etc/apk/
     && apk add --no-cache ca-certificates tzdata bash curl xz
 
 COPY --from=build-env /bin/esmd /esmd
+COPY config.json /config/config.json
 
 EXPOSE 8080
 ENTRYPOINT [ "/esmd", "--config", "/config/config.json"]

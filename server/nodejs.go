@@ -294,7 +294,8 @@ CheckNodejs:
 			if err != nil {
 				return
 			}
-			log.Infof("nodejs %s installed", nodejsLatestLTS)
+			os.Setenv("PATH", fmt.Sprintf("%s%c%s", nodeBinDir, os.PathListSeparator, PATH))
+			log.Infof("nodejs %s installed, nodedir:%s", nodejsLatestLTS, installDir)
 			installed = true
 			goto CheckNodejs
 		} else {

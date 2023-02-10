@@ -7,17 +7,17 @@
 
   "buildConcurrency": 0,
 
-  "workDir": "~/.esmd",
+  "workDir": ".esmd",
 
   "cache": "memory:default",
 
-  "database": "bolt:~/.esmd/esm.db",
+  "database": "bolt:.esmd/esm.db",
 
-  "storage": "local:~/.esmd/storage",
+  "storage": "local:.esmd/storage",
 
   "logLevel": "info",
 
-  "logDir": "~/.esmd/log",
+  "logDir": ".esmd/log",
 
   "origin": "",
 

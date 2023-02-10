@@ -84,7 +84,7 @@ func Serve(efs EmbedFS) {
 	}
 	nodeVer, yarnVer, err := checkNodejs(nodeInstallDir)
 	if err != nil {
-		log.Fatalf("check nodejs: %v", err)
+		log.Fatalf("check nodejs: %v(%s)", err, nodeInstallDir)
 	}
 	if cfg.NpmRegistry == "" {
 		output, err := exec.Command("npm", "config", "get", "registry").CombinedOutput()
