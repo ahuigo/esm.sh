@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM hdmap-artifactory-registry-vpc.cn-beijing.cr.aliyuncs.com/hdmap-go-base/golang:1.19.0-alpine AS build-env
+FROM hdmap-artifactory-registry-vpc.cn-beijing.cr.aliyuncs.com/hdmap-go-base/golang:1.18.0-alpine AS build-env
 
 ENV GOSUMDB=off \
     GO111MODULE=on \
